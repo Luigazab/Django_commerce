@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}Shoemart{% endblock %}</title>
+
+  {% load static %}
+  <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block css %}{% endblock %}
+</head>
+<body>
+  <header class="header">
+    <div class="nav">
+      <a href="home.html" class="logo">ShoeMart</a>
+      <nav>
+        <ul>
+          <li><a href="home.html">home</a></li>
+          <li><a href="new arrival.html">new arrival</a></li>
+          <li><a href="best collection.html">best collection</a></li>
+          <li><a href="about.html">about</a></li>
+        </ul>
+        <div class="nav-icon">
+          <span><i class="fa-solid fa-heart"></i></span>
+          <span><i class="fa-solid fa-cart-shopping"></i></span>
+        </div>
+      </nav>
+      <i class="fa-solid fa-bars burger_icon"></i>
+    </div>
+  </header>
+
+  
+  {% block content %}
+  {% endblock %}
+
+
+  <footer class="container">
+    <div class="wrapper">
+      <div class="col" data-aos="zoom-in">
+        <a href="home.html" class="logo">shoemart</a>
+        <p class="about-website">Step into style and comfort with ShoeMart 
+          <br>where every pair comes with quality, trend,<br>and unbeatable deals!
+        </p>
+      </div>
+      <div class="col" data-aos="zoom-in">
+        <h4>quick links</h4>
+        <a href="home.html">home</a>
+        <a href="about.html">about</a>
+        <a href="new arrival.html">new arrival</a>
+        <a href="best collection.html">best collection</a>
+      </div>
+      <div class="col" data-aos="zoom-in">
+        <h4>contact us</h4>
+        <p>shoemart@gmail.com</p>
+        <p>311-220-000-1</p>
+      </div>
+    </div>
+  </footer>
+  <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+  <script>
+    AOS.init();
+  </script>
+  <script src="main.js"></script>
+</body>
+</html>

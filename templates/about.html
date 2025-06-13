@@ -1,0 +1,88 @@
+{% extends 'base.html' %}
+
+{% block title %}Shoemart About{% endblock %}
+
+
+{% block content %}}
+<!--About Section-->
+    <section class="about container">
+        <div class="clr-one"></div>
+        <div class="clr-two"></div>
+        <div class="wrapper">
+            <div class="col-img col" >
+                <div class="get-off" data-aos="zoom-in">
+                    <h4>get up to 50% OFF</h4>
+                    <p class="off-text">Grab your perfect pair now and enjoy up to 50% off for a limited time!</p>
+                </div>
+                <figure data-aos="fade-left">
+                    <img src="assets/about/about-img.png" alt="about-img">
+                </figure>
+            </div>
+            <div class="col-text col" data-aos="fade-right">
+                <p class="sub-heading">about us</p>
+                <h2 class="heading-two"> we provide high <br> quality <span> shoes</span></h2>
+                <p class="about-text">
+                    We provide high-quality tools designed for durability, precision, and performance
+                    to help you achieve professional results with every task.
+                </p>
+                <button class="btn">read more</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Customer Review -->
+    <section class="container testimonial">
+        <div class="clr-one"></div>
+        <div class="section-heading">
+            <div class="heading">
+                <p class="sub-heading">testimonial</p>
+                <h2 class="heading-two">what our customer says</h2>
+            </div>
+        </div>
+        <div class="wrapper">
+            <div class="col" data-aos="zoom-in-up">
+                <figure><img src="asses/testimonail/tes-1.png" alt=""></figure>
+                <h3 class="heading-three">thor john</h3>
+                <p class="testi-message">I stumbled upon this shoe website and decided to give it a try. Wow, was I
+                    impressed! The quality of the shoes exceeded my expectations, and the customer service was
+                    outstanding. I'll definitely be a repeat customer!"</p>
+                <span class="ratting"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i></span>
+            </div>
+
+            <div class="col" data-aos="zoom-in-up">
+                <figure><img src="asses/testimonail/tes-2.png" alt=""></figure>
+                <h3 class="heading-three">john wick</h3>
+                <p class="testi-message">I've been searching for the perfect pair of shoes for months, and I finally
+                    found them on this website. Not only are they stylish and comfortable, but the ordering process was
+                    seamless</p>
+                <span class="ratting"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i></span>
+            </div>
+
+            <div class="col" data-aos="zoom-in-up">
+                <figure><img src="asses/testimonail/tes-3.png" alt=""></figure>
+                <h3 class="heading-three">James Jackie</h3>
+                <p class="testi-message">I'm not one to leave reviews often, but I had to for this website. The variety
+                    of shoes available is fantastic, and the prices are unbeatable. Plus, the shoes I ordered arrived in
+                    pristine condition and fit perfectly."</p>
+                <span class="ratting"><i class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i> <i class="fa-solid fa-star"></i> <i
+                        class="fa-solid fa-star"></i></span>
+            </div>
+        </div>
+    </section>
+
+<!-- Subscribe for News Latest Updates Section -->
+    <section class="container subscribe">
+        <div class="wrapper">
+            <h2 class="heading-two">subscribe for news and latest updates</h2>
+            <form>
+                <input type="email" class="email" placeholder="ex@gmail.com" >
+                <button class="btn">subscribe</button>
+            </form>
+        </div>
+    </section>
+{% endblock %}
