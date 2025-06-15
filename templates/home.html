@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load static %}
 {% block title %}Shoemart Home{% endblock %}
 
 
@@ -13,11 +13,11 @@
                 <h1 class="heading-one">best in style <br> collection <br> <span>for you</span></h1>
                 <p class="sub-text">We Craft The, We Want To Say The Best, <br>
                     But Through 70 Years Of Experience In The Industry</p>
-                <button class="btn btn-hero">pre-order now</button>
+                <button class="btn btn-hero">Shop Now</button>
             </div>
             <div class="col col-img">
                 <figure data-aos="fade-left">
-                    <img src="assets/hero/hero.png" alt="nike-shoe">
+                    <img src="{% static 'images/hero/hero.png' %}" alt="nike-shoe">
                 </figure>
                 <div class="hero-img-off" data-aos="zoom-in-up">
                     <h3 class="heading-three">get up to 50% OFF</h3>

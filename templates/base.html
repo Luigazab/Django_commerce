@@ -14,17 +14,20 @@
 <body>
   <header class="header">
     <div class="nav">
-      <a href="home.html" class="logo">ShoeMart</a>
       <nav>
+        <a href="{% url 'home' %}" class="logo">ShoeMart</a>
         <ul>
-          <li><a href="home.html">home</a></li>
-          <li><a href="new arrival.html">new arrival</a></li>
-          <li><a href="best collection.html">best collection</a></li>
-          <li><a href="about.html">about</a></li>
+          <li><a href="{% url 'home' %}">home</a></li>
+          <li><a href="{% url 'newArrival' %}">new arrival</a></li>
+          <li><a href="{% url 'bestCollection' %}">best collection</a></li>
+          <li><a href="{% url 'about' %}">about</a></li>
         </ul>
         <div class="nav-icon">
           <span><i class="fa-solid fa-heart"></i></span>
           <span><i class="fa-solid fa-cart-shopping"></i></span>
+        </div>
+        <div>
+          <button class="btn btn-hero"><a href="{% url 'login' %}">Login</a></button>
         </div>
       </nav>
       <i class="fa-solid fa-bars burger_icon"></i>
@@ -39,17 +42,17 @@
   <footer class="container">
     <div class="wrapper">
       <div class="col" data-aos="zoom-in">
-        <a href="home.html" class="logo">shoemart</a>
+        <a href="{% url 'home' %}" class="logo">shoemart</a>
         <p class="about-website">Step into style and comfort with ShoeMart 
           <br>where every pair comes with quality, trend,<br>and unbeatable deals!
         </p>
       </div>
       <div class="col" data-aos="zoom-in">
         <h4>quick links</h4>
-        <a href="home.html">home</a>
-        <a href="about.html">about</a>
-        <a href="new arrival.html">new arrival</a>
-        <a href="best collection.html">best collection</a>
+        <a href="{% url 'home' %}">home</a>
+        <a href="{% url 'about' %}">about</a>
+        <a href="{% url 'newArrival' %}">new arrival</a>
+        <a href="{% url 'bestCollection' %}">best collection</a>
       </div>
       <div class="col" data-aos="zoom-in">
         <h4>contact us</h4>
