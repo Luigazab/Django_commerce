@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+{% block content %}
+<div class="container">
+  <h2>Shopping Cart ({{ cart.items.count }} Items)</h2>
+
+  <div class="promo-banner">
+    <h3>Save 20% OFF Regular Priced Items & Free Shipping!</h3>
+    <button data-bs-toggle="modal" data-bs-target="#signupModal">JOIN NOW</button>
+    <button data-bs-toggle="modal" data-bs-target="#loginModal">SIGN IN</button>
+  </div>
+
+  <div class="cart-item">
+    <img src="{{ item.variant.product.images.first.image.url }}" width="100">
+    <p>{{ item.variant.product.name }}</p>
+    <p>Color: {{ item.variant.color }}</p>
+    <p>Size: {{ item.variant.size }}</p>
+    <p>Price: ₱{{ item.variant.product.price }}</p>
+    <form method="post" action="{% url 'cart:update_item' item.id %}">
+      {% csrf_token %}
+      <input type="number" name="quantity" value="{{ item.quantity }}">
+      <button type="submit">Edit</button>
+    </form>
+    <a href="{% url 'cart:remove_item' item.id %}">Remove</a>
+  </div>
+
+  <div class="order-summary">
+    <h4>Order Summary</h4>
+    <p>Subtotal: ₱{{ cart_total }}</p>
+    <p>Shipping: ₱{{ shipping_fee }}</p>
+    <p>Estimated Total: ₱{{ cart_total|add:shipping_fee }}</p>
+    <a class="btn btn-primary" href="{% url 'orders:checkout' %}">Proceed to Checkout</a>
+  </div>
+</div>
+{% endblock %}
