@@ -597,6 +597,7 @@ footer a:hover{
         display: flex;
         justify-content: center;
     }
+    
 
     .arrival .btn {
         width: 140px;
@@ -693,4 +694,7 @@ footer a:hover{
         width: 100%;
         text-align: center;
     }
+}
+input, label, textarea, select{
+    text-transform: none !important;
 }
