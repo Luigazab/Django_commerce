@@ -12,7 +12,7 @@
   {% block css %}{% endblock %}
 </head>
 <body>
-  <header class="header">
+  <header>
     <div class="nav">
       <nav>
         <a href="{% url 'home' %}" class="logo">ShoeMart</a>
@@ -25,7 +25,7 @@
         <div class="nav-icon">
           <span><i class="fa-solid fa-heart"></i></span>
           <span><i class="fa-solid fa-cart-shopping"></i></span>
-          <button class="btn btn-hero"><a href="{% url 'login' %}">Login</a></button>
+          <button class="btn btn-light"><a href="{% url 'login' %}">Login</a></button>
         </div>
       </nav>
       <i class="fa-solid fa-bars burger_icon"></i>
