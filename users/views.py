@@ -40,3 +40,9 @@ def register(request):
     return redirect('home')
 
   return render(request, 'loginsignup.html')
+
+def profile(request):
+  return render(request, 'profile.html')
+
+def orders(request):
+  return render(request, 'orders.html')

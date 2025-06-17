@@ -244,7 +244,8 @@ header .nav .logo{
     gap: 20px;
     width: 100%;
 }
-.nav nav ul{
+
+.middle{
     display: flex;
     justify-content: center;
     align-items: center;
@@ -632,7 +633,7 @@ footer a:hover{
         padding: 15px 10px;
     }
 
-    .nav .nav-icon {
+    .nav-icon {
         width: 100%;
         justify-content: flex-end;
         margin-right: 0;
@@ -643,7 +644,7 @@ footer a:hover{
         display: block;
     }
 
-    .nav nav ul {
+    .middle {
         position: absolute;
         top: 100%;
         right: 0;
@@ -656,7 +657,7 @@ footer a:hover{
         z-index: 99;
     }
 
-    .nav nav ul.active {
+    .middle.active {
         display: flex;
         opacity: 1;
         animation: fadeIn 0.5s ease-in-out;
@@ -673,7 +674,7 @@ footer a:hover{
         }
     }
 
-    .nav nav ul a:hover {
+    .middle a:hover {
         color: var(--first-gra-clr);
     }
 
