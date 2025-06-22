@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'products.apps.ProductsConfig',
     'cart.apps.CartConfig',
     'orders.apps.OrdersConfig',
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -137,3 +138,20 @@ LOGIN_URL = 'login'
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+JAZZMIN_SETTINGS = {
+  "site_title": "Shoemart Site Admin",
+
+  "site_header": "Shoemart",
+
+  "site_brand": "Shoemart",
+
+  "search_model": "products.Product",
+
+  "topmenu_links": [
+    {"name": "Home",  "url": "admin:index", "permissions": ["auth.view_user"]},
+    {"app": "products"},
+    {"app": "users"},
+    {"app": "orders"}
+    ]
+}

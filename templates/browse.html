@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Shoemart Home{% endblock %}
+{% block css %}
+<style>
+    .no-products-message {
+        text-align: center;
+        width: 100%;
+        padding: 100px 0;
+        font-size: 1.5rem;
+        color: #555;
+    }
+</style>
+{% endblock %}
+
+
+{% block content %}
+<!-- new collection -->
+<section class="container collection">
+    <!-- section header -->
+    <div class="section-heading">
+        <div class="heading">
+            <p class="sub-heading">All collection</p>
+            <h2 class="heading-two">our collection</h2>
+        </div>
+        <div class="btn-section">
+            <button class="btn-col btn" data-btn="all">all</button>
+            {% for category in categories %}
+                <button class="btn-col" data-btn="{{ category.slug }}">{{ category.name }}</button>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="grid-wrapper">
+    {% if products %}
+    {% for product in products %}
+        <div class="col- collection-item" data-item="{{ product.category.slug }}" data-aos="zoom-in-up">
+            <figure>
+                {% if product.main_image %}
+                    <img src="{{ product.main_image.image.url }}" alt="{{ product.main_image.alt_text }}">
+                {% else %}
+                    <img src="{% static 'images/default-image.png' %}" alt="No image">
+                {% endif %}
+            </figure>
+            <div class="col-body">
+                <p class="rating-icon"><i class="fa-solid fa-star"></i> <span class="rating-num">4.9</span></p>
+                <h3 class="heading-three">{{ product.name }}</h3>
+                <p class="sub-heading">{{ product.description|truncatechars:50 }}</p>
+                <div class="col-footer">
+                    <p class="shoe-price">₱{{ product.price }}</p>
+                    <a href="" class="shoe-btn btn">buy now</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    {% else %}
+        <div class="no-products-message" style="text-align:center; width: 100%; padding: 100px 0;">
+            <h2>No products yet.</h2>
+        </div>
+    {% endif %}
+    </div>
+    <div id="no-products-js" class="no-products-message" style="display: none;">
+            <h2>No products in this category yet.</h2>
+        </div>
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+            {% endif %}
+
+            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">Next</a>
+            {% endif %}
+        </div>
+</section>
+{% endblock %}

@@ -20,12 +20,12 @@
         <ul class="middle">
           <li><a href="{% url 'home' %}">home</a></li>
           <li><a href="{% url 'newArrival' %}">new arrival</a></li>
-          <li><a href="{% url 'bestCollection' %}">browse</a></li>
+          <li><a href="{% url 'browse' %}">browse</a></li>
           <li><a href="{% url 'about' %}">about</a></li>
         </ul>
         <div class="nav-icon">
-          <span><i class="fa-solid fa-heart"></i></span>
-          <span><i class="fa-solid fa-cart-shopping"></i></span>
+          <!-- <span><i class="fa-solid fa-heart"></i></span> -->
+          <span><a href="{% url 'cart' %}"><i class="fa-solid fa-cart-shopping"></i></a></span>
           {% if user.is_authenticated %}
             <div class="dropdown ms-auto">
               <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
@@ -70,7 +70,7 @@
         <a href="{% url 'home' %}">home</a>
         <a href="{% url 'about' %}">about</a>
         <a href="{% url 'newArrival' %}">new arrival</a>
-        <a href="{% url 'bestCollection' %}">best collection</a>
+        <a href="{% url 'browse' %}">browse</a>
       </div>
       <div class="col" data-aos="zoom-in">
         <h4>contact us</h4>

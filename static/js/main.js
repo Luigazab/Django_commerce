@@ -1,5 +1,6 @@
 let col_btn = document.querySelectorAll(".btn-col");
 let col_item = document.querySelectorAll(".collection-item");
+let noProductsMsg = document.getElementById("no-products-js");
 
 col_btn.forEach((btn,index)=>{
     btn.addEventListener("click",(e)=>{
@@ -8,13 +9,20 @@ col_btn.forEach((btn,index)=>{
         })
         e.target.classList.add("btn");
         let data_btn = btn.getAttribute("data-btn");
+        let hasVisible = false;
         col_item.forEach((col,inde)=>{
             if(col.getAttribute("data-item")==data_btn || data_btn == "all"){
                 col.classList.remove("hide")
+                hasVisible = true;
             }else{
                 col.classList.add("hide");
             }
         })
+        if (hasVisible) {
+            noProductsMsg.style.display = "none";
+        } else {
+            noProductsMsg.style.display = "block";
+        }
     })
 })
 
