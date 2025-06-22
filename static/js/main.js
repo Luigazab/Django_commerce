@@ -17,14 +17,10 @@ col_btn.forEach((btn,index)=>{
             }else{
                 col.classList.add("hide");
             }
-        })
-        if (hasVisible) {
-            noProductsMsg.style.display = "none";
-        } else {
-            noProductsMsg.style.display = "block";
-        }
-    })
-})
+        });
+        noProductsMsg.style.display = hasVisible ? "none" : "block";
+    });
+});
 
 
 // nav bar

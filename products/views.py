@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from .models import Product, Category
 from django.core.paginator import Paginator
 # Create your views here.
@@ -20,7 +20,30 @@ def browse(request):
     'page_obj': page_obj, 
     'categories': categories
     })
+
+
 def newArrival(request):
-  return render(request, 'new arrival.html')
+  products = Product.objects.filter(is_available=True).order_by('-created_at')[:8].prefetch_related('images')
+
+  for product in products:
+    images = product.images.all()
+    product.main_image = next((img for img in images if img.is_main), images.first() if images else None)
+
+  return render(request, 'new arrival.html', {
+      'products': products
+    })
+
+def product_detail(request, slug):
+  product = get_object_or_404(Product, slug=slug)
+  images = product.images.all()
+  variants = product.variants.all()
+  main_image = next((img for img in images if img.is_main), images.first() if images else None)
+
+  return render(request, 'product_detail.html',{
+    'product': product,
+    'main_image': main_image,
+    'images': images,
+    'variants': variants,
+  })
 def about(request):
   return render(request, 'about.html')

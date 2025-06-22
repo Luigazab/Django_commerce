@@ -11,6 +11,47 @@
         font-size: 1.5rem;
         color: #555;
     }
+    #no-products-js {
+        text-align: center;
+        padding: 50px 0;
+        font-size: 1.5rem;
+        color: #555;
+        display: none;
+    }
+    .grid-wrapper {
+        min-height: 300px; /* enough to show empty message and keep footer from jumping */
+    }
+
+    .hide {
+        display: none !important;
+    }
+    .pagination {
+        margin-top: 40px;
+        text-align: center;
+        font-size: 1rem;
+        color: #fff;
+    }
+
+    .pagination a {
+        display: inline-block;
+        padding: 8px 16px;
+        margin: 0 5px;
+        background-color: #ff00cc; /* pink/purple */
+        color: white;
+        border-radius: 5px;
+        text-decoration: none;
+        transition: background-color 0.3s ease;
+    }
+
+    .pagination a:hover {
+        background-color: #d600a0;
+    }
+
+    .pagination span {
+        margin: 0 10px;
+        color: #ccc;
+        font-weight: 500;
+    }
 </style>
 {% endblock %}
 
@@ -34,7 +75,7 @@
     <div class="grid-wrapper">
     {% if products %}
     {% for product in products %}
-        <div class="col- collection-item" data-item="{{ product.category.slug }}" data-aos="zoom-in-up">
+        <div class="col- collection-item" data-item="{{ product.category.slug }}"data-aos="zoom-in-up">
             <figure>
                 {% if product.main_image %}
                     <img src="{{ product.main_image.image.url }}" alt="{{ product.main_image.alt_text }}">
@@ -48,7 +89,7 @@
                 <p class="sub-heading">{{ product.description|truncatechars:50 }}</p>
                 <div class="col-footer">
                     <p class="shoe-price">₱{{ product.price }}</p>
-                    <a href="" class="shoe-btn btn">buy now</a>
+                    <a href="{% url 'product_detail' product.slug %}" class="shoe-btn btn">buy now</a>
                 </div>
             </div>
         </div>
@@ -58,20 +99,21 @@
             <h2>No products yet.</h2>
         </div>
     {% endif %}
-    </div>
-    <div id="no-products-js" class="no-products-message" style="display: none;">
+        <div id="no-products-js" class="no-products-message">
             <h2>No products in this category yet.</h2>
         </div>
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
-            {% endif %}
+    </div>
+    
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page={{ page_obj.previous_page_number }}">Previous</a>
+        {% endif %}
 
-            <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+        <span>Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}">Next</a>
-            {% endif %}
-        </div>
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}">Next</a>
+        {% endif %}
+    </div>
 </section>
-{% endblock %}
+{% endblock %}}
