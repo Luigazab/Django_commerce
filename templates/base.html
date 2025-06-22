@@ -59,7 +59,7 @@
 
   <footer class="container">
     <div class="wrapper">
-      <div class="col" data-aos="zoom-in">
+      <div class="col">
         <a href="{% url 'home' %}" class="logo">shoemart</a>
         <p class="about-website">Step into style and comfort with ShoeMart 
           <br>where every pair comes with quality, trend,<br>and unbeatable deals!
@@ -86,5 +86,6 @@
   <script src="{% static 'js/main.js' %}"></script>
   <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+  {% block script %}{% endblock %}
 </body>
 </html>
