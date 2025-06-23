@@ -81,27 +81,36 @@
         {% if variants %}
         <div class="mb-3">
           <h5>Available Variants:</h5>
-          <ul class="list-group">
-            {% for variant in variants %}
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Color: {{ variant.color }} | Size: {{ variant.size }}
-                <span class="badge {% if variant.stock > 0 %}bg-success{% else %}bg-danger{% endif %}">
-                  {% if variant.stock > 0 %}In stock ({{ variant.stock }}){% else %}Out of stock{% endif %}
-                </span>
-              </li>
-            {% endfor %}
-          </ul>
+          <form method="post" action="{% url 'add_to_cart' 0 %}" id="addToCartForm">
+            {% csrf_token %}
+
+            <div class="mb-3">
+              <label for="variant" class="form-label text-white">Choose Variant:</label>
+              <select name="variant_id" id="variant" class="form-select" required>
+                <option value="">Select variant</option>
+                {% for variant in variants %}
+                  {% if variant.stock > 0 %}
+                    <option value="{{ variant.id }}">
+                      {{ variant.color }} / {{ variant.size }} - In Stock ({{ variant.stock }})
+                    </option>
+                  {% else %}
+                    <option value="{{ variant.id }}" disabled>
+                      {{ variant.color }} / {{ variant.size }} - Out of Stock
+                    </option>
+                  {% endif %}
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="quantity" class="form-label text-white">Quantity:</label>
+              <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control w-25">
+            </div>
+
+            <button type="submit" class="btn btn-light">Add to Cart</button>
+          </form>
         </div>
         {% endif %}
-
-        <form method="post" action="">
-          {% csrf_token %}
-          <div class="mb-3">
-            <label for="quantity" class="form-label text-white">Quantity:</label>
-            <input type="number" id="quantity" name="quantity" value="1" min="1" class="form-control w-25">
-          </div>
-          <button type="submit" class="btn btn-light">Add to Cart</button>
-        </form>
       </div>
     </div>
   </div>
@@ -116,5 +125,16 @@
     margin: 24,
     background: '#000'
   })
+  const form = document.getElementById("addToCartForm");
+  const variantSelect = document.getElementById("variant");
+
+  variantSelect.addEventListener("change", function () {
+    const variantId = this.value;
+    if (variantId) {
+      form.action = `/cart/add/${variantId}/`;
+    } else {
+      form.action = "#";
+    }
+  });
 </script>
 {% endblock %}
