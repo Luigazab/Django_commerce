@@ -7,5 +7,5 @@ urlpatterns =[
   path('new_arrival/', views.newArrival, name='newArrival'),
   path('browse/', views.browse, name='browse'),
   path('about/', views.about, name='about'),
-  path('<slug:slug>/', views.product_detail, name='product_detail'),
+  path('product/<slug:slug>/', views.product_detail, name='product_detail'),
 ]

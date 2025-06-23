@@ -25,7 +25,7 @@
         </ul>
         <div class="nav-icon">
           <!-- <span><i class="fa-solid fa-heart"></i></span> -->
-          <span><a href="{% url 'cart' %}"><i class="fa-solid fa-cart-shopping"></i></a></span>
+          <span><a href="{% url 'cart_view' %}"><i class="fa-solid fa-cart-shopping"></i></a></span>
           {% if user.is_authenticated %}
             <div class="dropdown ms-auto">
               <button class="btn btn-light dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">

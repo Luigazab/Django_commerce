@@ -1,78 +1,115 @@
-
-{% extends 'base.html' %}
+{% extends "base.html" %}
 {% load static %}
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<style>
-  .cart-container {
-    display: flex;
-    gap: 2rem;
-    margin-top: 2rem;
-  }
-  .cart-products {
-    flex: 2;
-  }
-  .order-summary {
-    flex: 1;
-    background: #f8f9fa;
-    padding: 2rem;
-    border-radius: 8px;
-    height: fit-content;
-  }
-  .cart-item {
-    display: flex;
-    align-items: center;
-    gap: 1.5rem;
-    border-bottom: 1px solid #e9ecef;
-    padding: 1rem 0;
-  }
-  .cart-item img {
-    border-radius: 8px;
-  }
-  .cart-item-details {
-    flex: 1;
-  }
-  .promo-banner {
-    background: #e3f2fd;
-    padding: 1rem;
-    border-radius: 8px;
-    margin-bottom: 2rem;
-    display: flex;
-    align-items: center;
-    gap: 1rem;
-    justify-content: space-between;
-  }
-</style>
-{% block title %}Shoemart Home{% endblock %}
+{% block title %}Shoemart | Cart page{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+{% endblock %}
 {% block content %}
+<main class="container hero">
 <div class="container">
-  <h2>Shopping Cart ({{ cart.items.count }} Items)</h2>
-
-  <div class="promo-banner">
-    <h3>Save 20% OFF Regular Priced Items & Free Shipping!</h3>
-    <button data-bs-toggle="modal" data-bs-target="#signupModal">JOIN NOW</button>
-    <button data-bs-toggle="modal" data-bs-target="#loginModal">SIGN IN</button>
-  </div>
-
-  <div class="cart-item">
-    <img src="{{ item.variant.product.images.first.image.url }}" width="100">
-    <p>{{ item.variant.product.name }}</p>
-    <p>Color: {{ item.variant.color }}</p>
-    <p>Size: {{ item.variant.size }}</p>
-    <p>Price: ₱{{ item.variant.product.price }}</p>
-    <form method="post" action="{% url 'cart:update_item' item.id %}">
-      {% csrf_token %}
-      <input type="number" name="quantity" value="{{ item.quantity }}">
-      <button type="submit">Edit</button>
-    </form>
-    <a href="">Remove</a>
-  </div>
-
-  <div class="order-summary">
-    <h4>Order Summary</h4>
-    <p>Subtotal: ₱{{ cart_total }}</p>
-    <p>Shipping: ₱{{ shipping_fee }}</p>
-    <p>Estimated Total: ₱{{ cart_total|add:shipping_fee }}</p>
-    <a class="btn btn-primary" href="{% url 'orders:checkout' %}">Proceed to Checkout</a>
+  <h2 class="mb-4">Shopping Cart <small class="text-info">({{ items|length }} item{{ items|length|pluralize }})</small></h2>
+  <div class="row">
+    <!-- Left: Cart Items -->
+     {% if items %}
+    <div class="col col-lg-8">
+      {% for item in items %}
+      <div class="card mb-3 shadow-sm">
+        <div class="row g-0 align-items-center">
+          <div class="col-md-3 text-center p-2">
+            <img src="{{ item.variant.product.images.first.image.url }}" alt="{{ item.variant.product.name }}" class="img-fluid rounded" style="max-height: 120px;">
+          </div>
+          <div class="col-md-9">
+            <div class="card-body py-2">
+              <h5 class="card-title">{{ item.variant.product.name }}</h5>
+              <p class="mb-1"><strong>Style #:</strong> {{ item.variant.sku }}</p>
+              <p class="mb-1"><strong>Color:</strong> {{ item.variant.color }} | <strong>Size:</strong> {{ item.variant.size }}</p>
+              <p class="mb-2"><span class="text-success">In Stock</span></p>
+              <div class="d-flex justify-content-between align-items-center">
+                <form action="{% url 'update_quantity' item.id %}" method="post" class="d-flex align-items-center quantity-form" data-item-id="{{ item.id }}">
+                  {% csrf_token %}
+                  <label for="quantity" class="me-2 mb-0"><strong>QTY:</strong></label>
+                  <select name="quantity" class="form-select w-auto" onchange="this.form.submit()">
+                    {% for i in "12345678910"|make_list %}
+                      <option value="{{ i }}" {% if item.quantity == i|add:"0" %}selected{% endif %}>{{ i }}</option>
+                    {% endfor %}
+                  </select>
+                </form>
+                <div class="text-end">
+                  <p class="mb-1">
+                    <del class="text-muted">₱{{ item.variant.product.price|floatformat:2 }}</del><br>
+                    <span class="fw-bold text-primary">₱{{ item.variant.product.price|floatformat:2 }}</span>
+                  </p>
+                  <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-link text-danger p-0">Remove</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+    </div>
+    {% else %}
+      <div class="col col-lg-8">
+        <h2 class="text-white">Your cart is empty</h2>
+        <a href="{% url 'browse' %}" class="btn btn-outline-light mt-3">Continue Shopping</a>
+      </div>
+    {% endif %}
+    <!-- Right: Summary -->
+    <div class="col col-lg-4 d-flex justify-content-end">
+      <div class="card shadow-sm w-100" style="min-width: 280px;">
+        <div class="card-body">
+          <h4 class="card-title mb-3">Order Summary</h4>
+          <ul class="list-group list-group-flush mb-3">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Subtotal
+              <span>₱{{ total|floatformat:2 }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Shipping
+              <span>₱{{ shipping|default:"30.00" }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+              Estimated Tax
+              <span>₱0.00</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+              Estimated Total
+              <span>₱{{ total|add:30.00|floatformat:2 }}</span>
+            </li>
+          </ul>
+          <button class="btn btn-info w-100">PROCEED TO CHECKOUT</button>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
+</main>
+{% endblock %}
+{% block script %}
+<script>
+document.querySelectorAll('.quantity-form').forEach(form => {
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    const itemId = this.dataset.itemId;
+    const formData = new FormData(this);
+    fetch(this.action, {
+      method: 'POST',
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': formData.get('csrfmiddlewaretoken'),
+      },
+      body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.success) {
+        // Update subtotal or page section if needed
+        alert(`Updated quantity to ${data.quantity}`);
+        location.reload(); // You can avoid reloading by updating the subtotal live
+      }
+    });
+  });
+});
+</script>
 {% endblock %}

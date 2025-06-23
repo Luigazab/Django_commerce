@@ -3,8 +3,31 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from .models import UserProfile
 from django.contrib.auth import login
+from cart.models import Cart, CartItem
 
-# Create your views here.
+def adopt_guest_cart(request, user):
+  session_key = request.session.session_key
+  if not session_key:
+    return
+  try:
+    guest_cart = Cart.objects.get(session_key=session_key, user__isnull=True)
+  except Cart.DoesNotExist:
+    return
+
+  user_cart, _ = Cart.objects.get_or_create(user=user)
+
+  for item in guest_cart.items.all():
+    existing = CartItem.objects.filter(cart=user_cart, variant=item.variant).first()
+    if existing:
+      existing.quantity += item.quantity
+      existing.save()
+    else:
+      item.cart = user_cart
+      item.save()
+
+  guest_cart.delete()
+
+
 def register(request):
   if request.method == 'POST':
     firstname =  request.POST.get('firstname', '').strip()
@@ -37,6 +60,7 @@ def register(request):
     )
     userProfile.save()
     login(request, user)
+    adopt_guest_cart(request, user)
     return redirect('home')
 
   return render(request, 'loginsignup.html')
