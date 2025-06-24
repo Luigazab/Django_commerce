@@ -82,4 +82,6 @@ def paypal_success(request):
 # Payment success redirect
 
 def payment_success(request):
-  return render(request, 'payment_success.html')
+  order_number = request.GET.get('order')
+  return render(request, 'payment_success.html', {'order_number': order_number})
+

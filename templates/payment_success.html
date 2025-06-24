@@ -3,7 +3,9 @@
 <section class="container collection">
 <div class="container text-center py-5">
   <h1 class="text-success">🎉 Payment Successful!</h1>
-  <p>Thank you for your order. You'll receive an email confirmation shortly.</p>
+  <p>Thank you for your order. Your order has been placed successfully.</p>
+  <h4 class="mt-3">Order Number:</h4>
+  <div class="fs-5 fw-bold text-success">{{ order_number }}</div>
   <a href="{% url 'browse' %}" class="btn btn-primary mt-3">Continue Shopping</a>
 </div>
 </section>

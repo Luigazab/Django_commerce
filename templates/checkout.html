@@ -15,10 +15,14 @@
 {% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-  <h2 class="mb-4">Checkout</h2>
+<main>
+<div class="container-fluid mt-5 py-5" style="background-color: #1c002b;">
+  <div class="row justify-content-center">
+  <div class="col-11 col-lg-10 col-xl-9">
+  <div class="card p-4" style="background: linear-gradient(to right, #2e003e, #4a0073); border-radius: 20px; color: white;">
+  <h2 class="mb-4 text-center">Checkout</h2>
 
-  <div class="row">
+  <div class="row g-4 justify-content-around">
     <!-- Shipping Info Form -->
     <div class="col-md-6">
       <form id="shipping-form">
@@ -46,14 +50,21 @@
     </div>
 
     <!-- Order Summary and Payment -->
-    <div class="col-md-6">
+    <div class="col-md-5">
       <h4 class="mb-3">Order Summary</h4>
       <ul class="list-group mb-3">
         {% for item in order_items %}
         <li class="list-group-item d-flex justify-content-between align-items-center">
-          <div>
-            <strong>{{ item.variant.product.name }}</strong><br>
-            <small>{{ item.variant.name }} × {{ item.quantity }}</small>
+          <div class="d-flex align-items-center">
+            {% with item.variant.product.images.first as product_image %}
+              {% if product_image %}
+              <img src="{{ product_image.image.url }}" alt="{{ item.variant.product.name }}" class="me-3" style="width: 60px; height: auto; object-fit: contain;">
+              {% endif %}
+            {% endwith %}
+            <div>
+              <strong>{{ item.variant.product.name }}</strong><br>
+              <small>{{ item.variant.name }} × {{ item.quantity }}</small>
+            </div>
           </div>
           <span>₱{{ item.price|floatformat:2 }}</span>
         </li>
@@ -66,7 +77,11 @@
 
       <!-- PayPal Button -->
       <div class="mt-4" id="paypal-button-container"></div>
+      <small class="text-secondary">Fill in all shipping fields to enable payment.</small>
     </div>
+  </div>
+  </div>
+  </div>
   </div>
 </div>
 
@@ -88,6 +103,23 @@
 
 <script>
 paypal.Buttons({
+  onInit: function (data, actions) {
+    // Initially disable the button
+    actions.disable();
+
+    // Enable only if all fields are filled
+    const form = document.getElementById('shipping-form');
+    form.addEventListener('input', function () {
+      const allFilled = [...form.elements].every(input =>
+        input.value.trim() !== ''
+      );
+      if (allFilled) {
+        actions.enable();
+      } else {
+        actions.disable();
+      }
+    });
+  },
   createOrder: function(data, actions) {
     return actions.order.create({
       purchase_units: [{
@@ -120,7 +152,7 @@ paypal.Buttons({
           toast.show();
 
           setTimeout(() => {
-            window.location.href = '/orders/payment/success/';
+            window.location.href = '/orders/payment/success/?order={{ order.order_number }}';
           }, 2500);
         } else {
           document.getElementById('payment-toast').classList.remove('bg-success');
