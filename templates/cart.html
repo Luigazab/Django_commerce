@@ -7,23 +7,27 @@
 {% endblock %}
 {% block content %}
 <main class="container hero">
-<div class="container">
-  <h2 class="mb-4">Shopping Cart <small class="text-info">({{ items|length }} item{{ items|length|pluralize }})</small></h2>
-  <div class="row">
-    <!-- Left: Cart Items -->
-     {% if items %}
-    <div class="col col-lg-8">
-      {% for item in items %}
+<div class="container-fluid my-5">
+  <div class="row justify-content-center">
+    <!-- Main Cart Section -->
+    <div class="col-lg-8 col-xl-9">
+      <h2 class="mb-4">Shopping Cart <small class="text-info">({{ items|length }} item{{ items|length|pluralize }})</small></h2>
+      {% if items %}
+        {% for item in items %}
       <div class="card mb-3 shadow-sm">
         <div class="row g-0 align-items-center">
           <div class="col-md-3 text-center p-2">
-            <img src="{{ item.variant.product.images.first.image.url }}" alt="{{ item.variant.product.name }}" class="img-fluid rounded" style="max-height: 120px;">
+            <a href="{% url 'product_detail' item.variant.product.slug %}">
+              <img src="{{ item.variant.product.images.first.image.url }}" alt="{{ item.variant.product.name }}" class="img-fluid rounded" style="max-height: 120px;">
+            </a>
           </div>
           <div class="col-md-9">
             <div class="card-body py-2">
-              <h5 class="card-title">{{ item.variant.product.name }}</h5>
-              <p class="mb-1"><strong>Style #:</strong> {{ item.variant.sku }}</p>
-              <p class="mb-1"><strong>Color:</strong> {{ item.variant.color }} | <strong>Size:</strong> {{ item.variant.size }}</p>
+              <h5 class="card-title"><a href="{% url 'product_detail' item.variant.product.slug %}" class="text-decoration-none text-dark">
+                {{ item.variant.product.name }}
+              </a></h5>
+              <p class="mb-1 text-secondary"><strong>Style #:</strong> {{ item.variant.sku }}</p>
+              <p class="mb-1 text-secondary"><strong>Color:</strong> {{ item.variant.color }} | <strong>Size:</strong> {{ item.variant.size }}</p>
               <p class="mb-2"><span class="text-success">In Stock</span></p>
               <div class="d-flex justify-content-between align-items-center">
                 <form action="{% url 'update_quantity' item.id %}" method="post" class="d-flex align-items-center quantity-form" data-item-id="{{ item.id }}">
@@ -37,10 +41,9 @@
                 </form>
                 <div class="text-end">
                   <p class="mb-1">
-                    <del class="text-muted">₱{{ item.variant.product.price|floatformat:2 }}</del><br>
                     <span class="fw-bold text-primary">₱{{ item.variant.product.price|floatformat:2 }}</span>
                   </p>
-                  <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-link text-danger p-0">Remove</a>
+                  <a href="{% url 'remove_from_cart' item.id %}" class="btn btn-danger text-light p-1">Remove</a>
                 </div>
               </div>
             </div>
@@ -48,16 +51,17 @@
         </div>
       </div>
     {% endfor %}
-    </div>
     {% else %}
       <div class="col col-lg-8">
         <h2 class="text-white">Your cart is empty</h2>
         <a href="{% url 'browse' %}" class="btn btn-outline-light mt-3">Continue Shopping</a>
       </div>
     {% endif %}
+    </div>
     <!-- Right: Summary -->
-    <div class="col col-lg-4 d-flex justify-content-end">
-      <div class="card shadow-sm w-100" style="min-width: 280px;">
+    <div class="col-lg-4 col-xl-3">
+      <div class="position-sticky" style="top: 100px;margin-top: 20%; margin-bottom: 5%;">
+      <div class="card shadow-sm">
         <div class="card-body">
           <h4 class="card-title mb-3">Order Summary</h4>
           <ul class="list-group list-group-flush mb-3">
@@ -70,7 +74,7 @@
               <span>₱{{ shipping|default:"30.00" }}</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center">
-              Estimated Tax
+              VAT
               <span>₱0.00</span>
             </li>
             <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
@@ -78,8 +82,9 @@
               <span>₱{{ total|add:30.00|floatformat:2 }}</span>
             </li>
           </ul>
-          <button class="btn btn-info w-100">PROCEED TO CHECKOUT</button>
+          <a href="{% url 'create_order' %}" class="btn btn-info w-100">PROCEED TO CHECKOUT</a>
         </div>
+      </div>
       </div>
     </div>
   </div>

@@ -17,7 +17,7 @@ class Order(models.Model):
 
   user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
   guest_email = models.EmailField(null=True, blank=True)
-  order_number = models.CharField(max_length=30, unique=True, default=uuid.uuid4)
+  order_number = models.CharField(max_length=36, unique=True, default=uuid.uuid4)
   created_at = models.DateTimeField(auto_now_add=True)
   is_paid = models.BooleanField(default=False)
   total_price = models.DecimalField(max_digits=10, decimal_places=2)

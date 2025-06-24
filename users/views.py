@@ -5,6 +5,7 @@ from .models import UserProfile
 from django.contrib.auth import login
 from cart.models import Cart, CartItem
 
+
 def adopt_guest_cart(request, user):
   session_key = request.session.session_key
   if not session_key:
@@ -59,8 +60,8 @@ def register(request):
       is_subscribed=subs,
     )
     userProfile.save()
-    login(request, user)
     adopt_guest_cart(request, user)
+    login(request, user)
     return redirect('home')
 
   return render(request, 'loginsignup.html')

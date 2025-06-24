@@ -27,9 +27,14 @@ class ProductImageInline(admin.TabularInline):  # or admin.StackedInline if you 
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-  list_display = ['name', 'price', 'is_available']
+  list_display = ['name', 'price','category_name', 'is_available']
   prepopulated_fields = {'slug': ('name',)}
   inlines = [ProductVariantInline, ProductImageInline]
+
+  def category_name(self, obj):
+    return obj.category.name
+  category_name.admin_order_field = 'category__name'
+  category_name.short_description = 'Category'
 
 @admin.register(ProductVariant)
 class ProductVariantAdmin(admin.ModelAdmin):
