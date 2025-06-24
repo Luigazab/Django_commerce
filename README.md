@@ -2,7 +2,8 @@ Shoemart: A Django E-commerce Website
 
 Shoemart is a modern, feature-rich e-commerce web application built with Django. Inspired by sites like Skechers, this platform allows users to browse and purchase shoes, manage wishlists and carts, and track their orders. It supports both guest and authenticated users, offering a seamless and responsive online shopping experience.
 
-![Shoemart Screenshot](![image](https://github.com/user-attachments/assets/466c4366-11f2-4416-a9f9-c53393f61f9a))
+![Shoemart Screenshot](https://github.com/user-attachments/assets/9678ce7a-7e09-4b0a-b3a2-d6973ce4df06)
+
 
 ---
 
