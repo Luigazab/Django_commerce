@@ -26,7 +26,12 @@ class Order(models.Model):
   payment_id = models.CharField(max_length=100, blank=True)
 
   def __str__(self):
-    return f"Order #{self.id} by {self.user.username}"
+    if self.user:
+      return f"Order #{self.id} by {self.user.username}"
+    elif self.guest_email:
+      return f"Order #{self.id} by guest ({self.guest_email})"
+    else:
+      return f"Order #{self.id}"
 
 class OrderItem(models.Model):
   order = models.ForeignKey(Order, on_delete=models.CASCADE)

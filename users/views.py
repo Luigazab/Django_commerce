@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import UserProfile
+from .models import UserProfile, DefaultShippingInfo
+from orders.models import Order
 from django.contrib.auth import login
 from cart.models import Cart, CartItem
 
@@ -66,8 +68,40 @@ def register(request):
 
   return render(request, 'loginsignup.html')
 
+@login_required
 def profile(request):
-  return render(request, 'profile.html')
+    user = request.user
+    profile = UserProfile.objects.get(user=user)
+    orders = Order.objects.filter(user=user).order_by('-created_at')
+    shipping = DefaultShippingInfo.objects.filter(user=user).first()
+
+    if request.method == 'POST':
+        if 'save_profile' in request.POST:
+            profile.firstname = request.POST.get('firstname', '')
+            profile.lastname = request.POST.get('lastname', '')
+            profile.phone = request.POST.get('phone', '')
+            profile.address = request.POST.get('address', '')
+            profile.is_subscribed = request.POST.get('is_subscribed') == 'on'
+            profile.save()
+            return redirect('profile')
+
+        elif 'save_shipping' in request.POST:
+            if not shipping:
+                shipping = DefaultShippingInfo(user=user)
+            shipping.full_name = request.POST.get('full_name', '')
+            shipping.phone = request.POST.get('shipping_phone', '')
+            shipping.city = request.POST.get('city', '')
+            shipping.postal_code = request.POST.get('postal_code', '')
+            shipping.address = request.POST.get('shipping_address', '')
+            shipping.save()
+            return redirect('profile')
+
+    return render(request, 'profile.html', {
+        'user': user,
+        'profile': profile,
+        'orders': orders,
+        'default_shipping': shipping,
+    })
 
 def orders(request):
   return render(request, 'orders.html')

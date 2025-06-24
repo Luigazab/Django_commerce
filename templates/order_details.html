@@ -1,0 +1,137 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Order #{{ order.order_number }}{% endblock %}
+
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<style>
+  label {
+    color: white;
+  }
+</style>
+{% endblock %}
+
+{% block content %}
+<main>
+  <div class="container-fluid mt-5 py-5" style="background-color: #1c002b;">
+    <div class="row justify-content-center">
+      <div class="col-11 col-lg-10 col-xl-9">
+        <div class="card p-4" style="background: linear-gradient(to right, #2e003e, #4a0073); border-radius: 20px; color: white;">
+          <h2 class="mb-4 text-center">Order Details</h2>
+
+          <div class="row g-4 justify-content-around">
+            <!-- Shipping Info -->
+            <div class="col-md-6">
+              <div class="mb-3"><strong>Order Number:</strong> {{ order.order_number }}</div>
+              <div class="mb-3"><strong>Status:</strong> <span class="badge bg-{{ order.status|yesno:'success,secondary' }}">{{ order.status|capfirst }}</span></div>
+              <div class="mb-3"><strong>Payment Method:</strong> {{ order.payment_method|default:"—" }}</div>
+              <div class="mb-3"><strong>Shipping To:</strong><br>
+                {{ order.shippinginfo.full_name }}<br>
+                {{ order.shippinginfo.phone }}<br>
+                {{ order.shippinginfo.address }}, {{ order.shippinginfo.city }} {{ order.shippinginfo.postal_code }}
+              </div>
+
+              {% if order.status == "pending" %}
+              <form method="post">
+                {% csrf_token %}
+                <button type="submit" name="cancel_order" class="btn btn-outline-danger w-100">Cancel Order</button>
+              </form>
+              {% endif %}
+            </div>
+
+            <!-- Order Summary -->
+            <div class="col-md-5">
+              <h4 class="mb-3">Order Summary</h4>
+              <ul class="list-group mb-3">
+                {% for item in order_items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                  <div class="d-flex align-items-center">
+                    {% with item.variant.product.images.first as product_image %}
+                      {% if product_image %}
+                      <img src="{{ product_image.image.url }}" alt="{{ item.variant.product.name }}" class="me-3" style="width: 60px; height: auto; object-fit: contain;">
+                      {% endif %}
+                    {% endwith %}
+                    <div>
+                      <strong>{{ item.variant.product.name }}</strong><br>
+                      <small>{{ item.variant.name }} × {{ item.quantity }}</small>
+                    </div>
+                  </div>
+                  <span>₱{{ item.price|floatformat:2 }}</span>
+                </li>
+                {% endfor %}
+                <li class="list-group-item d-flex justify-content-between">
+                  <strong>Total</strong>
+                  <strong>₱{{ order.total_price|floatformat:2 }}</strong>
+                </li>
+              </ul>
+
+              {% if not order.is_paid and order.status == "pending" %}
+              <div class="mt-4" id="paypal-button-container"></div>
+              <small class="text-secondary">Continue your payment to complete the order.</small>
+              {% else %}
+              <p class="mt-4 text-success">✅ This order is already paid.</p>
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 9999">
+  <div id="payment-toast" class="toast align-items-center text-white bg-success border-0" role="alert" aria-live="assertive" aria-atomic="true">
+    <div class="d-flex">
+      <div class="toast-body" id="toast-message">
+        Payment successful!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block script %}
+{% if not order.is_paid and order.status == "pending" %}
+<script src="https://www.paypal.com/sdk/js?client-id=AXlJxnrVtDu4qkFjPXGy8vBkZqqxyshDkNxvSjDHDpQs-WysIt8VhUdf7qPiD8M7Cscpl6xA7QZ9ZneX&currency=PHP"></script>
+<script>
+paypal.Buttons({
+  createOrder: function(data, actions) {
+    return actions.order.create({
+      purchase_units: [{
+        amount: { value: '{{ order.total_price }}' }
+      }]
+    });
+  },
+  onApprove: function(data, actions) {
+    return actions.order.capture().then(function(details) {
+      fetch('/orders/paypal-success/', {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': '{{ csrf_token }}',
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          orderNumber: '{{ order.order_number }}',
+          payerID: data.payerID,
+          orderID: data.orderID,
+        })
+      }).then(res => {
+        if (res.ok) {
+          document.getElementById('toast-message').innerText = "Payment successful!";
+          new bootstrap.Toast(document.getElementById('payment-toast')).show();
+          setTimeout(() => window.location.reload(), 2500);
+        } else {
+          document.getElementById('payment-toast').classList.remove('bg-success');
+          document.getElementById('payment-toast').classList.add('bg-danger');
+          document.getElementById('toast-message').innerText = "Payment failed. Please try again.";
+          new bootstrap.Toast(document.getElementById('payment-toast')).show();
+        }
+      });
+    });
+  }
+}).render('#paypal-button-container');
+</script>
+{% endif %}
+{% endblock %}

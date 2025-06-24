@@ -5,6 +5,7 @@ from django.contrib.auth.models import User
 from products.models import ProductVariant
 from cart.models import Cart, CartItem
 from .models import Order, OrderItem, ShippingInfo
+from django.contrib.auth.decorators import login_required
 import json
 
 # Create order from cart
@@ -85,3 +86,18 @@ def payment_success(request):
   order_number = request.GET.get('order')
   return render(request, 'payment_success.html', {'order_number': order_number})
 
+@login_required
+def order_detail(request, order_number):
+    order = get_object_or_404(Order, order_number=order_number, user=request.user)
+    order_items = order.orderitem_set.select_related('variant__product')
+    
+    if request.method == "POST":
+        if 'cancel_order' in request.POST and order.status == 'pending':
+            order.status = 'cancelled'
+            order.save()
+            return redirect('order_detail', order_number=order_number)
+    
+    return render(request, 'order_details.html', {
+        'order': order,
+        'order_items': order_items,
+    })

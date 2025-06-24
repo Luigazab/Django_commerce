@@ -11,3 +11,14 @@ class UserProfile(models.Model):
 
   def __str__(self):
     return f"{self.firstname} {self.lastname}"
+
+class DefaultShippingInfo(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  full_name = models.CharField(max_length=200)
+  phone = models.CharField(max_length=15)
+  city = models.CharField(max_length=100)
+  postal_code = models.CharField(max_length=20)
+  address = models.TextField()
+
+  def __str__(self):
+      return f"Shipping Info for {self.user.username}"
