@@ -103,5 +103,8 @@ def profile(request):
         'default_shipping': shipping,
     })
 
+@login_required
 def orders(request):
-  return render(request, 'orders.html')
+  user = request.user
+  orders = Order.objects.filter(user=user).order_by('-created_at')
+  return render(request, 'orders.html', {'orders': orders})

@@ -12,7 +12,7 @@
                 <h2 class="heading-two">new <span>arrival</span> </h2>
                 <p class="sub-heading">our new collection</p>
             </div>
-            <button class="btn"><a href="{% url 'browse' %}">see more</a></button>
+            <button class="btn btn-light"><a href="{% url 'browse' %}">see more</a></button>
         </div>
         <div class="grid-wrapper">
             {% for product in products %}
@@ -30,7 +30,7 @@
                     <p class="sub-heading">{{ product.description|truncatechars:30 }}</p>
                     <div class="col-footer">
                         <p class="shoe-price">₱{{ product.price }}</p>
-                        <a href="{% url 'product_detail' product.slug %}" class="shoe-btn btn">buy now</a>
+                        <a href="{% url 'product_detail' product.slug %}" class="shoe-btn btn btn-light">buy now</a>
                     </div>
                 </div>
             </div>
