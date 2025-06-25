@@ -55,17 +55,30 @@ source venv/bin/activate   # On Windows: venv\Scripts\activate
 # 3. Install dependencies
 pip install -r requirements.txt
 
-# 4. Run migrations
+# 4. Create a MySQL database named shoemart
+CREATE DATABASE shoemart;
+
+# 5. Edit User, Password, host, and port on Django_commerce/settings.py according to your own.
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'shoemart',
+        'USER': 'your_mysql_username',
+        'PASSWORD': 'your_mysql_password',
+        'HOST': 'localhost',
+        'PORT': '3306',
+    }
+}
+
+# 6. Run migrations
 python manage.py makemigrations
 python manage.py migrate
 
-# 5. Create a superuser
+# 7. Create an admin user to access the admin page.
 python manage.py createsuperuser
 
-# 6. Run the development server
+# 8. Start the development Server
 python manage.py runserver
-Visit http://localhost:8000/ to explore the site!
-
 
 
 Built with ❤️ for final project
