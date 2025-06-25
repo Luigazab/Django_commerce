@@ -5,6 +5,7 @@
 
 {% block content %}
 <main class="container hero">
+    <div class="container-fluid">
     {% if orders %}
     {% for order in orders %}
     <div class="card mb-4 shadow-sm">
@@ -34,5 +35,6 @@
 {% else %}
     <p class="text-muted">You haven't placed any orders yet.</p>
 {% endif %}
+    </div>
 </main>
 {% endblock %}
